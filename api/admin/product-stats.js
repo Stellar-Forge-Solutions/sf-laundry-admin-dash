@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   // 1. Fetch shops and their entitlements
   let shopQuery = db.from('shops')
-    .select('id, name, owner_name, mobile, email, city, status, plan, custom_order_limit, overage_limit_rupees, created_at, entitlements(product, plan, plan_tier, overage_rate, trial_started_at, trial_ends_at, paid_until)')
+    .select('id, name, owner_name, mobile, email, city, status, plan, custom_order_limit, monthly_overage_limit, created_at, entitlements(product, plan, plan_tier, overage_rate, trial_started_at, trial_ends_at, paid_until)')
     .is('deleted_at', null)
 
   if (shopId) {

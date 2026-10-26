@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   // Find shop
   const { data: shop, error: shopErr } = await db.from('shops')
-    .select('id, signup_product, plan, custom_order_limit, overage_limit_rupees')
+    .select('id, signup_product, plan, custom_order_limit, monthly_overage_limit')
     .eq('id', shop_id)
     .maybeSingle()
 
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     shopUpdates.custom_order_limit = custom_order_limit === '' || custom_order_limit === null ? null : parseInt(custom_order_limit, 10)
   }
   if (overage_limit_rupees !== undefined) {
-    shopUpdates.overage_limit_rupees = overage_limit_rupees === '' || overage_limit_rupees === null ? 300 : parseFloat(overage_limit_rupees)
+    shopUpdates.monthly_overage_limit = overage_limit_rupees === '' || overage_limit_rupees === null ? 300 : parseFloat(overage_limit_rupees)
   }
 
   if (Object.keys(shopUpdates).length > 0) {
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
       product: targetProduct,
       plan: plan || shop.plan,
       custom_order_limit: shopUpdates.custom_order_limit,
-      overage_limit_rupees: shopUpdates.overage_limit_rupees,
+      monthly_overage_limit: shopUpdates.monthly_overage_limit,
       overage_rate: entUpdates.overage_rate
     }
   })

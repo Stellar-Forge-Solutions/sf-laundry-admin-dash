@@ -27,7 +27,6 @@ export default async function handler(req, res) {
       plan_renewal_date,
       billing_cycle,
       custom_order_limit,
-      overage_limit_rupees,
       monthly_overage_limit,
       entitlements (
         product,
@@ -50,5 +49,11 @@ export default async function handler(req, res) {
 
   const { data, error } = await query.limit(500)
   if (error) return res.status(500).json({ error: 'Could not load shops: ' + error.message })
-  res.json({ shops: data })
+
+  const formattedShops = (data || []).map((s) => ({
+    ...s,
+    overage_limit_rupees: s.monthly_overage_limit ?? 300
+  }))
+
+  res.json({ shops: formattedShops })
 }
